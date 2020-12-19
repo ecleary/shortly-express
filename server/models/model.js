@@ -6,10 +6,10 @@ const executeQuery = (query, values) => {
 };
 
 const parseData = options => {
-  return _.reduce(options, (parsed, value, key) => {
-    parsed.string.push(`${key} = ?`);
-    parsed.values.push(value);
-    return parsed;
+  return _.reduce(options, (parsed, value, key) => { // {username: 'test1'}
+    parsed.string.push(`${key} = ?`); // 'username = ?'
+    parsed.values.push(value); // 'test1'
+    return parsed; // { string: ['username = ?'], values: ['test1'] }
   }, { string: [], values: [] });
 };
 
@@ -51,11 +51,12 @@ class Model {
    * the conditions provided, only one will be provided upon fulfillment.
    */
   get(options) {
-    let parsedOptions = parseData(options);
-    let queryString = `SELECT * FROM ${this.tablename} WHERE ${parsedOptions.string.join(' AND ')} LIMIT 1`;
+    let parsedOptions = parseData(options); // { string: ['username = ?'], values: ['test1'] }
+    let queryString = `SELECT * FROM ${this.tablename} WHERE ${parsedOptions.string.join(' AND ')} LIMIT 1`; // 'SELECT * FROM users WHERE username = ? LIMIT 1'
     return executeQuery(queryString, parsedOptions.values).then(results => results[0]);
   }
-
+  // 'SELECT * FROM users WHERE username = ? LIMIT 1'
+  // 'SELECT * FROM users WHERE username = 'test1' LIMIT 1'
   /**
    * Creates a new record in the table.
    * @param {Object} options - An object with key/value pairs, where the keys should match

@@ -28,7 +28,7 @@ class Links extends Model {
       let match = response.body.match(tag);
       let title = match ? match[1] : url;
       return title;
-    }); 
+    });
   }
 
   /**

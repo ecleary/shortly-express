@@ -5,6 +5,10 @@ const partials = require('express-partials');
 const bodyParser = require('body-parser');
 const Auth = require('./middleware/auth');
 const models = require('./models');
+const db = require('./db');
+const executeQuery = (query, values) => {
+  return db.queryAsync(query, values).spread(results => results);
+};
 
 const app = express();
 
@@ -38,8 +42,9 @@ app.get('/links', (req, res, next) => {
 app.post('/signup', (req, res, next) => {
   var username = req.body.username;
   console.log(username);
+  console.log('TESTING JS MYSQL QUERY: ' + executeQuery('SELECT * FROM users WHERE username = \'bob\'', null));
   var password = req.body.password;
-  return models.Users.get({ username })
+  return models.Users.get({ username }) // {username: 'test1'}
     .then(username => {
       if (username) {
         //if exists redirect to sign up

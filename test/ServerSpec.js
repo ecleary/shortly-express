@@ -6,6 +6,7 @@ var httpMocks = require('node-mocks-http');
 var app = require('../server/app.js');
 var schema = require('../server/db/config.js');
 var port = 4568;
+const password = require('../mysqlConfig.js');
 
 /************************************************************/
 // Mocha doesn't have a way to designate pending before blocks.
@@ -39,8 +40,8 @@ describe('', function() {
     /* TODO: Update user and password if different than on your local machine            */
     /*************************************************************************************/
     db = mysql.createConnection({
-      user: 'student',
-      password: 'student',
+      user: 'root',
+      password: password,
       database: 'shortly'
     });
 
@@ -123,7 +124,7 @@ describe('', function() {
     });
   });
 
-  xdescribe('Account Creation:', function() {
+  describe('Account Creation:', function() {
 
     it('signup creates a new user record', function(done) {
       var options = {

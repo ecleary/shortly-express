@@ -17,18 +17,15 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 
 
-app.get('/', 
-(req, res) => {
+app.get('/', (req, res) => {
   res.render('index');
 });
 
-app.get('/create', 
-(req, res) => {
+app.get('/create', (req, res) => {
   res.render('index');
 });
 
-app.get('/links', 
-(req, res, next) => {
+app.get('/links', (req, res, next) => {
   models.Links.getAll()
     .then(links => {
       res.status(200).send(links);
@@ -38,8 +35,42 @@ app.get('/links',
     });
 });
 
-app.post('/links', 
-(req, res, next) => {
+app.post('/signup', (req, res, next) => {
+  var username = req.body.username;
+  console.log(username);
+  var password = req.body.password;
+  return models.Users.get({ username })
+    .then(username => {
+      if (username) {
+        //if exists redirect to sign up
+        res.send(`username: ${username}`);
+        throw username;
+      }
+      // return models.Links.getUrlTitle(url);
+    })
+    .then((username, password) => {
+
+      return models.Users.create({
+        username: username,
+        password: password //,
+        // baseUrl: req.headers.origin
+      });
+    })
+    // .then(results => {
+    //   return models.Links.get({ id: results.insertId });
+    // })
+    // .then(link => {
+    //   throw link;
+    // })
+    .error(error => {
+      res.status(500).send(error);
+    })
+    .catch(username => {
+      res.status(200).send(`Sorry, the name ${username} has already been taken\n`);
+    });
+});
+
+app.post('/links', (req, res, next) => {
   var url = req.body.url;
   if (!models.Links.isValidUrl(url)) {
     // send back a 404 if link is not valid

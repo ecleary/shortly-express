@@ -50,15 +50,29 @@ app.post('/signup', (req, res, next) => {
         //if exists redirect to sign up
         throw user;
       }
-      console.log(`WE EXPECT TO SEE THE USERNAME HERE: ${username}`);
-      console.log(`WE EXPECT TO SEE THE PASSWORD HERE: ${password}`);
+      // console.log(`WE EXPECT TO SEE THE USERNAME HERE: ${username}`);
+      // console.log(`WE EXPECT TO SEE THE PASSWORD HERE: ${password}`);
       return models.Users.create({ username, password });
     })
     .then((results) => {
-      console.log(`UNSTRINGIFYED RESULTS: ${results}`);
-      console.log(`STRINGIFYED RESULTS: ${JSON.stringify(results)}`);
+      models.Sessions.create(results.insertId);
+      // console.log(`UNSTRINGIFYED RESULTS: ${results}`);
+      // console.log(`STRINGIFYED RESULTS: ${JSON.stringify(results)}`);
+      /*
+      {
+        "fieldCount":0,
+        "affectedRows":1,
+        "insertId":4,
+        "serverStatus":2,
+        "warningCount":0,
+        "message":"",
+        "protocol41":true,
+        "changedRows":0
+      }
+      */
+
       // update session
-      // hash password
+      // hash password (???)
 
       // next then block: handling redirecting
     })

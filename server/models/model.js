@@ -70,7 +70,8 @@ class Model {
     let queryString = `INSERT INTO ${this.tablename} SET ?`;
     return executeQuery(queryString, options);
   }
-
+  // INSERT INTO session (id, hash, userId) VALUES (1,2,3)
+  // INSERT INTO session SET id=1, hash=2, userId=3
   /**
    * Updates a record(s) in the table.
    * @param {Object} options - An object where the keys are column names and the

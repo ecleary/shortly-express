@@ -39,29 +39,41 @@ app.get('/links', (req, res, next) => {
     });
 });
 
-// If queried item exists in database, once resolved, above function call evaluates to {"id":2,"username":"George","password":"George","salt":null}
 app.post('/signup', (req, res, next) => {
   var username = req.body.username;
+  // console.log(username);
+  // console.log('TESTING JS MYSQL QUERY: ' + executeQuery('SELECT * FROM users WHERE username = \'bob\'', null));
   var password = req.body.password;
-  return models.Users.get({ username })
+  return models.Users.get({ username }) // {username: 'test1'}
     .then(user => {
-      // console.log(`WE EXPECT TO SEE THE USER HERE: ${user.username}`);
+      console.log(`WE EXPECT TO SEE THE USER HERE: ${JSON.stringify(user)}`);
       if (user) {
         //if exists redirect to sign up
+        // res.send(`username: ${username}`);
         throw user;
       }
+      // return models.Links.getUrlTitle(url);
       console.log(`WE EXPECT TO SEE THE USERNAME HERE: ${username}`);
       console.log(`WE EXPECT TO SEE THE PASSWORD HERE: ${password}`);
       return models.Users.create({ username, password });
     })
     .then((results) => {
-      console.log(`UNSTRINGIFYED RESULTS: ${results}`);
-      console.log(`STRINGIFYED RESULTS: ${JSON.stringify(results)}`);
       // update session
       // hash password
 
       // next then block: handling redirecting
+
+      // return models.Users.create({
+      //   username: username,
+      //   password: password
+      // });
     })
+    // .then(results => {
+    //   return models.Links.get({ id: results.insertId });
+    // })
+    // .then(link => {
+    //   throw link;
+    // })
     .error(error => {
       res.status(500).send(error);
     })

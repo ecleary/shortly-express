@@ -55,7 +55,7 @@ app.post('/signup', (req, res, next) => {
       return models.Users.create({ username, password });
     })
     .then((results) => {
-      models.Sessions.create(results.insertId);
+      return models.Sessions.create(results.insertId);
       // console.log(`UNSTRINGIFYED RESULTS: ${results}`);
       // console.log(`STRINGIFYED RESULTS: ${JSON.stringify(results)}`);
       /*
@@ -75,6 +75,22 @@ app.post('/signup', (req, res, next) => {
       // hash password (???)
 
       // next then block: handling redirecting
+    }).then(nastyObject => {
+      console.log(JSON.stringify(sessionHash));
+      var objToPass = {id: nastyObject.insertId};
+      return models.Sessions.get(objToPass);
+      /*
+      {
+        "fieldCount":0,
+        "affectedRows":1,
+        "insertId":3,
+        "serverStatus":2,
+        "warningCount":0,
+        "message":"",
+        "protocol41":true,
+        "changedRows":0
+      }
+      */
     })
     .error(error => {
       res.status(500).send(error);

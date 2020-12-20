@@ -55,6 +55,7 @@ app.post('/signup', (req, res, next) => {
       return models.Users.create({ username, password });
     })
     .then((results) => {
+      console.log('MADE IT TO LINE 58');
       return models.Sessions.create(results.insertId);
       // console.log(`UNSTRINGIFYED RESULTS: ${results}`);
       // console.log(`STRINGIFYED RESULTS: ${JSON.stringify(results)}`);
@@ -76,7 +77,7 @@ app.post('/signup', (req, res, next) => {
 
       // next then block: handling redirecting
     }).then(nastyObject => {
-      console.log(JSON.stringify(sessionHash));
+      console.log('MADE IT TO LINE 80');
       var objToPass = {id: nastyObject.insertId};
       return models.Sessions.get(objToPass);
       /*
@@ -89,6 +90,22 @@ app.post('/signup', (req, res, next) => {
         "message":"",
         "protocol41":true,
         "changedRows":0
+      }
+      */
+    }).then(sessionObj => {
+      res.status(200).send(sessionObj.hash);
+      console.log(`POTENTIAL SESSION OBJECT: ${JSON.stringify(sessionObj)}`);
+      /*
+      {
+        "id":1,
+        "hash":"8299a50b0bc79aa21ef8978371bd12553a1ee6832a575a1d60645dd27af3da0f",
+        "userId":1,
+        "user":{
+          "id":1,
+          "username":"Samantha",
+          "password":"073af2e9096aa799ab542084857677f667cb94c236ed85213bf79bdfe46745dd",
+          "salt":"dd51ec44ce17a4635b2f54faad8162955f8fdab835ba7c6907f9587ffb1f9b46"
+        }
       }
       */
     })

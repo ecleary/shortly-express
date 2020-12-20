@@ -33,17 +33,32 @@ class Sessions extends Model {
    * match the options, the promise will only be fulfilled with one.
    */
   get(options) {
-    return super.get.call(this, options)
-      .then(session => {
+    return super.get.call(this, options) // options === {tableColumnName: 'rowValue'}
+      .then(session => {                 // options === {id: '3'}
         if (!session || !session.userId) {
           return session;
         }
         return Users.get({ id: session.userId }).then(user => {
           session.user = user;
+          console.log(`THIS IS THE SESSION: ${JSON.stringify(session)}`);
           return session;
         });
       });
   }
+
+  /*
+  {
+    "id":1,
+    "hash":"8299a50b0bc79aa21ef8978371bd12553a1ee6832a575a1d60645dd27af3da0f",
+    "userId":1,
+    "user":{
+      "id":1,
+      "username":"Samantha",
+      "password":"073af2e9096aa799ab542084857677f667cb94c236ed85213bf79bdfe46745dd",
+      "salt":"dd51ec44ce17a4635b2f54faad8162955f8fdab835ba7c6907f9587ffb1f9b46"
+    }
+  }
+  */
 
   /**
    * Creates a new session. Within this function, a hash is randomly generated.

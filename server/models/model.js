@@ -50,7 +50,7 @@ class Model {
    * error that occurred during the query. Note that even if multiple objects match
    * the conditions provided, only one will be provided upon fulfillment.
    */
-  get(options) {
+  get(options) {                            // options === {username: 'test1'}
     let parsedOptions = parseData(options); // { string: ['username = ?'], values: ['test1'] }
     let queryString = `SELECT * FROM ${this.tablename} WHERE ${parsedOptions.string.join(' AND ')} LIMIT 1`; // 'SELECT * FROM users WHERE username = ? LIMIT 1'
     return executeQuery(queryString, parsedOptions.values).then(results => results[0]);
